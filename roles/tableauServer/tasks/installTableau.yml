@@ -1,20 +1,37 @@
-- name: Install some packets
-  apt:
-    name: "{{ packages }}"
-    update_cache: yes
-    state: latest
-  vars:
-    packages:
-      - gdebi-core
-      - vim
-- name: Install Tableau
-  apt:
-    deb: https://www.tableau.com/downloads/server/deb
-- name: Run the initialize-tsm
-  become_user: ubuntu
-  become: True
-  shell: sudo /opt/tableau/tableau_server/packages/scripts.*/initialize-tsm --accepteula
+- name: Install Tableau for Ubuntu 18
+  when:
+    - ansible_facts['os_family'] == "Debian"
+    - ansible_facts['distribution'] == "Ubuntu"
+    - ansible_facts['distribution_major_version'] | int == 18
+  block:
+    - name: Install some packets
+      apt:
+        name: "{{ packages }}"
+        update_cache: yes
+        state: latest
+      vars:
+        packages:
+          - gdebi-core
+          - vim
+    - name: Install Tableau
+      apt:
+        deb: https://www.tableau.com/downloads/server/deb
+    - name: Run the initialize-tsm
+      become_user: ubuntu
+      become: True
+      shell: sudo /opt/tableau/tableau_server/packages/scripts.*/initialize-tsm --accepteula
 
 
- 
- 
+- name: Install Tableau for CentOS 7
+  when:
+    - ansible_facts['os_family'] == "RedHat"
+    - ansible_facts['distribution'] == "CentOS"
+    - ansible_facts['distribution_major_version'] | int == 7
+  block:
+    - name: Install Tableau for CentOS
+      yum:
+        name: https://www.tableau.com/downloads/server/rpm
+    - name: Run the initialize-tsm
+      become_user: centos
+      become: True
+      shell: sudo /opt/tableau/tableau_server/packages/scripts.*/initialize-tsm --accepteula 
