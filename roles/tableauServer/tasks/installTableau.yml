@@ -1,0 +1,20 @@
+- name: Install some packets
+  apt:
+    name: "{{ packages }}"
+    update_cache: yes
+    state: latest
+  vars:
+    packages:
+      - gdebi-core
+      - vim
+- name: Install Tableau
+  apt:
+    deb: https://www.tableau.com/downloads/server/deb
+- name: Run the initialize-tsm
+  become_user: ubuntu
+  become: True
+  shell: sudo /opt/tableau/tableau_server/packages/scripts.*/initialize-tsm --accepteula
+
+
+ 
+ 

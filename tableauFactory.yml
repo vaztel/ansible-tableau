@@ -1,0 +1,10 @@
+---
+# Usefull only if we want to make sur Python is already installed
+# and we already know how to install it.
+#- import_playbook: playbook/scratchStart.yml
+- hosts: "{{ variable_host | default('test') }}"
+  gather_facts: True
+#  become: True
+  roles:
+#    - common
+    - tableauServer

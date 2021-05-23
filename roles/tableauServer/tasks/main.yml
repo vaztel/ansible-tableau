@@ -1,0 +1,3 @@
+- name: Install Tableau
+  import_tasks: ./installTableau.yml
+ 
